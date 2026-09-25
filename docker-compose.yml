@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: forhire
+      POSTGRES_PASSWORD: forhire
+      POSTGRES_DB: forhire
+    ports:
+      - "5432:5432"
+    volumes:
+      - forhire_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U forhire -d forhire"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  forhire_pg:

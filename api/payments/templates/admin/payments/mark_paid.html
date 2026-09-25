@@ -1,0 +1,24 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<h1>Mark payouts paid</h1>
+<p>Enter the UPI reference (UTR). Every selected due payout is marked paid with this reference.</p>
+{% if utr_error %}
+<p style="color:#ba2121;">UTR is required.</p>
+{% endif %}
+<form method="post">
+  {% csrf_token %}
+  <p>
+    <label for="utr">UTR</label>
+    <input id="utr" name="utr" maxlength="64" required style="min-width: 16rem;">
+  </p>
+  {% for payout in queryset %}
+  <input type="hidden" name="{{ action_checkbox_name }}" value="{{ payout.pk }}">
+  <p>{{ payout.coach }} — {{ payout.amount_paise }} paise</p>
+  {% endfor %}
+  <input type="hidden" name="action" value="mark_paid">
+  <input type="hidden" name="apply" value="1">
+  <input type="submit" value="Mark paid">
+  <a href="{% url 'admin:payments_payout_changelist' %}">Cancel</a>
+</form>
+{% endblock %}
